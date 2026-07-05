@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة التوجيه الطلابي | الواجهة التفاعلية 2030</title>
+    
+    <!-- خطوط جوجل (Tajawal) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبة 3D Tilt للبطاقات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    
+    <!-- مكتبة الأصوات التفاعلية Tone.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Tajawal', 'sans-serif'] },
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#3b82f6',
+                        accent: '#6366f1',
+                        darkBg: '#09090b',
+                        darkCard: '#18181b'
+                    },
+                    animation: {
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'float 12s ease-in-out infinite',
+                        'typing': 'typing 2s steps(20, end) forwards',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0) scale(1)' },
+                            '50%': { transform: 'translateY(-20px) scale(1.05)' },
+                        },
+                        'typing': {
+                            from: { width: '0' },
+                            to: { width: '100%' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+            @media (min-width: 768px) { cursor: none; }
+        }
+        
+        a, button, input { cursor: none; }
+
+        /* المؤشر السحري (يختفي في شاشات الجوال) */
+        #magic-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 24px; height: 24px;
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: difference;
+        }
+        .cursor-hover {
+            width: 60px !important;
+            height: 60px !important;
+            background-color: rgba(59, 130, 246, 0.4);
+            border-color: transparent !important;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+        .hero-gradient {
+            background: linear-gradient(-45deg, #eff6ff, #e0e7ff, #dbeafe, #f3e8ff);
+            background-size: 400% 400%;
+            animation: gradient-x 15s ease infinite;
+        }
+        .dark .hero-gradient {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #172554);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: all 0.4s ease;
+            touch-action: pan-y; /* لضمان التمرير العمودي في الجوال */
+        }
+        .dark .service-card {
+            background: #18181b;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .service-card:hover {
+            box-shadow: 0 25px 50px -12px var(--hover-color);
+            border-color: transparent;
+        }
+        .dark .service-card:hover {
+            box-shadow: 0 0 30px var(--hover-color), inset 0 0 15px rgba(255,255,255,0.02);
+            border-color: var(--theme-color);
+        }
+
+        .typewriter-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid #3b82f6;
+            animation: typing 1.5s steps(30, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #3b82f6; } }
+        
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            z-index: 999999;
+            width: 0%;
+            transition: width 0.1s ease-out;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(59,130,246,0.8) 0%, rgba(59,130,246,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .dark .particle {
+            background: radial-gradient(circle, rgba(99,102,241,0.8) 0%, rgba(99,102,241,0) 70%);
+        }
+
+        .modal-overlay {
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-darkBg dark:text-slate-100 transition-colors duration-500 min-h-screen flex flex-col relative selection:bg-blue-200 selection:text-blue-900">
+
+    <div id="scroll-progress"></div>
+    <div id="magic-cursor" class="hidden md:block"></div>
+
+    <!-- شاشة الدخول السينمائية -->
+    <div id="splash-screen" class="fixed inset-0 z-[9999] bg-slate-50 dark:bg-darkBg flex flex-col items-center justify-center transition-opacity duration-1000 px-4 text-center">
+        <div class="relative mb-8 md:mb-10 flex items-center justify-center animate-float">
+            <!-- شعار وزارة التعليم المفرغ مع الظل -->
+            <img src="./logo.png" alt="شعار وزارة التعليم" class="h-24 md:h-36 object-contain relative z-10 drop-shadow-xl">
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-5xl font-black text-slate-800 dark:text-white typewriter-text px-2 max-w-full overflow-hidden">
+            بوابة التوجيه الطلابي
+        </h1>
+        <p class="text-slate-500 dark:text-slate-400 mt-4 text-xs md:text-sm font-medium tracking-widest animate-pulse">جاري تهيئة النظام...</p>
+    </div>
+
+    <!-- الهيدر الزجاجي -->
+    <header class="glass-panel fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3 md:gap-4 group interactive-element">
+                    <!-- شعار وزارة التعليم في الهيدر -->
+                    <div class="group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                        <img src="./logo.png" alt="وزارة التعليم" class="h-10 md:h-12 object-contain drop-shadow-md">
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-black text-slate-900 dark:text-white tracking-tight">التوجيه الطلابي</h1>
+                        <p class="text-[9px] md:text-[10px] text-blue-600 dark:text-blue-400 font-bold tracking-widest">MINISTRY OF EDUCATION</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 md:gap-4">
+                    
+                    <!-- مركز الإشعارات الفورية -->
+                    <div class="relative">
+                        <button id="notiBtn" class="interactive-element w-10 h-10 rounded-full bg-slate-200/50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-white dark:hover:bg-slate-700 transition-all shadow-sm relative">
+                            <i class="fa-regular fa-bell text-lg"></i>
+                            <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse"></span>
+                        </button>
+                        
+                        <!-- قائمة الإشعارات المنسدلة -->
+                        <div id="notiDropdown" class="hidden absolute left-0 md:left-auto md:right-0 mt-3 w-[calc(100vw-2rem)] sm:w-80 glass-panel rounded-2xl shadow-2xl overflow-hidden transform origin-top-left md:origin-top-right transition-all">
+                            <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-white/50 dark:bg-slate-800/50">
+                                <h3 class="font-bold text-slate-800 dark:text-white">أحدث الإشعارات</h3>
+                                <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-2 py-1 rounded-full">جديد 3</span>
+                            </div>
+                            <div class="max-h-64 overflow-y-auto">
+                                <div class="p-4 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer transition-colors flex gap-3 interactive-element">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-500 flex items-center justify-center shrink-0"><i class="fa-solid fa-medal"></i></div>
+                                    <div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">اعتماد 5 شهادات تميز</p><p class="text-xs text-slate-500">منذ 10 دقائق</p></div>
+                                </div>
+                                <div class="p-4 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer transition-colors flex gap-3 interactive-element">
+                                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center shrink-0"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                    <div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">تأخر 3 طلاب عن الطابور</p><p class="text-xs text-slate-500">منذ 45 دقيقة</p></div>
+                                </div>
+                                <div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer transition-colors flex gap-3 interactive-element">
+                                    <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center shrink-0"><i class="fa-solid fa-bullhorn"></i></div>
+                                    <div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">تحديث خطة التوجيه الوزارية</p><p class="text-xs text-slate-500">منذ ساعتين</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="themeToggle" class="interactive-element w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-yellow-400 flex items-center justify-center hover:scale-110 transition-transform shadow-inner">
+                        <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                        <i class="fa-solid fa-sun hidden dark:block text-lg"></i>
+                    </button>
+
+                    <div class="hidden md:flex items-center gap-3 bg-white/50 dark:bg-slate-800/50 px-5 py-2 rounded-2xl border border-white dark:border-slate-700 shadow-sm interactive-element">
+                        <div class="text-left">
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-white">عبدالهادي المحسن</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">موجه طلابي</p>
+                        </div>
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-gradient pt-28 md:pt-32 pb-16 md:pb-20 relative overflow-hidden">
+        <!-- جزيئات مضيئة في الخلفية -->
+        <div class="particle w-32 h-32 top-10 right-[10%] animate-float-slow"></div>
+        <div class="particle w-48 h-48 bottom-20 left-[15%] animate-float" style="animation-delay: 1s;"></div>
+        <div class="particle w-24 h-24 top-40 left-[40%] animate-float-slow" style="animation-delay: 2.5s;"></div>
+        <div class="particle w-64 h-64 -bottom-10 right-[25%] animate-float" style="animation-delay: 4s; opacity: 0.2"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center mt-6 md:mt-10">
+            
+            <h2 class="text-3xl sm:text-4xl md:text-6xl font-black text-slate-800 dark:text-white mb-4 md:mb-6 leading-tight min-h-[90px] md:min-h-[80px] flex items-center justify-center flex-wrap">
+                <span id="dynamic-greeting"></span><span class="inline-block w-1 h-8 md:h-10 bg-blue-500 animate-pulse-fast align-middle ml-1"></span>
+            </h2>
+            
+            <p class="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 md:mb-10 max-w-2xl mx-auto font-medium leading-relaxed px-2">
+                بيئة رقمية تفاعلية مصممة لتمكين الموجه الطلابي من إدارة العمليات واستدامة التميز بطرق غير تقليدية.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3 md:gap-4 mb-8 md:mb-12">
+                <div class="relative w-full max-w-xl group interactive-element">
+                    <div class="absolute inset-y-0 right-0 pr-4 md:pr-5 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass text-blue-500 text-lg md:text-xl group-focus-within:animate-bounce"></i>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="ابحث عن: الحضور، السلوك..." 
+                           class="w-full pl-12 md:pl-16 pr-12 md:pr-14 py-4 md:py-5 glass-panel rounded-2xl shadow-xl focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all text-base md:text-lg font-bold text-slate-700 dark:text-white placeholder-slate-400">
+                    <button id="micBtn" class="absolute inset-y-0 left-0 pl-4 md:pl-5 pr-3 md:pr-4 flex items-center justify-center text-slate-400 hover:text-blue-500 transition-colors">
+                        <i class="fa-solid fa-microphone text-lg md:text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- زر عرض الإحصائيات -->
+                <button id="openStatsBtn" class="interactive-element w-full sm:w-auto shrink-0 px-6 py-4 md:py-5 rounded-2xl glass-panel font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 shadow-xl transition-all flex items-center justify-center gap-2 group">
+                    <i class="fa-solid fa-chart-pie group-hover:rotate-180 transition-transform duration-500"></i>
+                    <span>نظرة سريعة</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full -mt-10 relative z-20">
+        <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- البطاقات التفاعلية تولد هنا بواسطة الجافاسكريبت -->
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 dark:bg-black text-slate-400 py-10 mt-auto border-t border-slate-800 z-10 relative">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 interactive-element">
+                <i class="fa-solid fa-shield-halved text-xl"></i>
+            </div>
+            <h4 class="text-white font-bold text-lg mb-2">إدارة التوجيه الطلابي</h4>
+            <p class="text-sm mb-2">نحو بيئة تعليمية محفزة وآمنة &copy; 2026</p>
+            <p class="text-sm font-bold text-blue-500 dark:text-blue-400">مدرسة الجشة المتوسطة</p>
+        </div>
+    </footer>
+
+    <!-- نافذة الإحصائيات المنبثقة -->
+    <div id="statsModal" class="fixed inset-0 z-[99999] hidden flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-slate-900/60 modal-overlay" id="statsOverlay"></div>
+        <div class="relative bg-white dark:bg-slate-900 w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transform scale-95 opacity-0 transition-all duration-300 mx-2 sm:mx-4" id="statsContent">
+            <div class="p-4 md:p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
+                <div class="flex items-center gap-2 md:gap-3">
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-chart-line"></i></div>
+                    <h2 class="text-lg md:text-xl font-black text-slate-800 dark:text-white">مؤشرات الأداء اليومية</h2>
+                </div>
+                <button id="closeStatsBtn" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-red-500 interactive-element"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-4 md:p-8 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                <!-- إحصائية متحركة 1 (إجمالي الطلاب 325) -->
+                <div class="text-center p-4 md:p-6 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 animate-fade-in-up">
+                    <i class="fa-solid fa-users text-2xl md:text-3xl text-blue-500 mb-2 md:mb-3"></i>
+                    <h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">325</h3>
+                    <p class="text-xs md:text-sm font-bold text-slate-500">إجمالي الطلاب</p>
+                </div>
+                <!-- إحصائية متحركة 2 -->
+                <div class="text-center p-4 md:p-6 rounded-2xl bg-green-50 dark:bg-green-900/10 border border-green-100 dark:border-green-900/30 animate-fade-in-up" style="animation-delay: 0.1s">
+                    <i class="fa-solid fa-calendar-check text-2xl md:text-3xl text-green-500 mb-2 md:mb-3"></i>
+                    <h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">98%</h3>
+                    <p class="text-xs md:text-sm font-bold text-slate-500">نسبة الحضور</p>
+                </div>
+                <!-- إحصائية متحركة 3 -->
+                <div class="text-center p-4 md:p-6 rounded-2xl bg-orange-50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-900/30 animate-fade-in-up" style="animation-delay: 0.2s">
+                    <i class="fa-solid fa-star text-2xl md:text-3xl text-orange-500 mb-2 md:mb-3"></i>
+                    <h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">45</h3>
+                    <p class="text-xs md:text-sm font-bold text-slate-500">طلاب متميزون</p>
+                </div>
+                <!-- إحصائية متحركة 4 -->
+                <div class="text-center p-4 md:p-6 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 animate-fade-in-up" style="animation-delay: 0.3s">
+                    <i class="fa-solid fa-clipboard-user text-2xl md:text-3xl text-red-500 mb-2 md:mb-3"></i>
+                    <h3 class="text-2xl md:text-4xl font-black text-slate-800 dark:text-white mb-1">12</h3>
+                    <p class="text-xs md:text-sm font-bold text-slate-500">حالة سلوكية</p>
+                </div>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-800 p-3 md:p-4 text-center text-xs text-slate-500">آخر تحديث للبيانات: قبل 5 دقائق</div>
+        </div>
+    </div>
+
+    <script>
+        // مصفوفة البطاقات كاملة (6 بطاقات)
+        const servicesData = [
+            { title: 'برامج التوجيه الطلابي', desc: 'المكتبة الشاملة لتصفح وتنفيذ برامج خطة التوجيه الطلابي المعتمدة وزارياً.', url: 'https://hadimm2001-source.github.io/Guidance_Programs/', icon: 'fa-book-open-reader', themeColor: '#8b5cf6', hoverShadow: 'rgba(139, 92, 246, 0.4)', delay: '0' },
+            { title: 'ترشيح الطلاب المتميزين', desc: 'نظام إلكتروني لترشيح الطلاب للجوائز والمسابقات على مستوى المدرسة.', url: 'https://hadimm2001-source.github.io/Recommendation2026/', icon: 'fa-trophy', themeColor: '#10b981', hoverShadow: 'rgba(16, 185, 129, 0.4)', delay: '100' },
+            { title: 'رصد السلوك المتميز', desc: 'منصة لتحفيز الإيجابية، ورصد الإنجازات لبناء لوحات شرف لتعزيز التنافس.', url: 'https://hadimm2001-source.github.io/Solowk2030/', icon: 'fa-medal', themeColor: '#f59e0b', hoverShadow: 'rgba(245, 158, 11, 0.4)', delay: '200' },
+            { title: 'رصد الحضور والتأخير والغياب', desc: 'متابعة دقيقة وفورية لحضور الطلاب، وإصدار إشعارات لرفع الانضباط.', url: 'https://hadimm2001-source.github.io/Student/', icon: 'fa-fingerprint', themeColor: '#3b82f6', hoverShadow: 'rgba(59, 130, 246, 0.4)', delay: '300' },
+            { title: 'رصد المشكلات السلوكية', desc: 'توثيق الحالات السلوكية وتطبيق الخطط العلاجية الإرشادية لدعم الطالب.', url: 'https://hadimm2001-source.github.io/profile2026/', icon: 'fa-shield-heart', themeColor: '#ef4444', hoverShadow: 'rgba(239, 68, 68, 0.4)', delay: '400' },
+            { title: 'تقارير برنامج حضوري', desc: 'استعراض تقارير وإحصائيات الحضور والانصراف التفصيلية لبرنامج حضوري.', url: 'https://hadimm2001-source.github.io/hather2026/', icon: 'fa-clipboard-check', themeColor: '#14b8a6', hoverShadow: 'rgba(20, 184, 166, 0.4)', delay: '500' }
+        ];
+
+        let synth = null;
+        let isAudioReady = false;
+        async function initAudio() {
+            if (!isAudioReady) { await Tone.start(); synth = new Tone.PolySynth(Tone.Synth).toDestination(); synth.volume.value = -15; isAudioReady = true; }
+        }
+        window.addEventListener('click', initAudio, { once: true });
+        window.addEventListener('touchstart', initAudio, { once: true }); // لدعم الجوالات
+        
+        function playHoverSound() { if (isAudioReady && synth) synth.triggerAttackRelease("C6", "32n", "+0", 0.1); }
+        function playClickSound() { if (isAudioReady && synth) synth.triggerAttackRelease(["E5", "A5"], "16n"); }
+        function playPopSound() { if (isAudioReady && synth) synth.triggerAttackRelease("G5", "16n"); }
+
+        const servicesContainer = document.getElementById('servicesGrid');
+        const searchInput = document.getElementById('searchInput');
+
+        function renderCards(services) {
+            servicesContainer.innerHTML = '';
+            if (services.length === 0) {
+                servicesContainer.innerHTML = `<div class="col-span-full glass-panel p-12 rounded-3xl text-center border-dashed shadow-sm mt-10 transition-colors"><i class="fa-solid fa-face-frown-open text-5xl text-slate-400 mb-4"></i><h4 class="text-2xl font-bold text-slate-700 dark:text-slate-200 mb-2">لم نجد ما تبحث عنه</h4></div>`; return;
+            }
+            services.forEach((service) => {
+                const cardHTML = `
+                    <div class="service-card rounded-3xl p-6 md:p-8 relative overflow-hidden flex flex-col h-full group interactive-element" 
+                         style="--hover-color: ${service.hoverShadow}; --theme-color: ${service.themeColor}; animation: fadeInUp 0.6s ease forwards ${service.delay}ms; opacity: 0;"
+                         data-tilt data-tilt-max="7" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.4" onmouseenter="playHoverSound()">
+                        <div class="absolute -right-12 -top-12 w-32 h-32 rounded-full opacity-[0.05] dark:opacity-10 transition-all duration-700 group-hover:scale-[4] group-hover:opacity-10 dark:group-hover:opacity-20" style="background-color: ${service.themeColor};"></div>
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-sm transition-transform duration-300 group-hover:-translate-y-2 relative z-10" style="background-color: ${service.themeColor}15; color: ${service.themeColor}; border: 1px solid ${service.themeColor}30;"><i class="fa-solid ${service.icon} text-2xl md:text-3xl group-hover:scale-110 transition-transform"></i></div>
+                        <div class="relative z-10 flex-grow text-right md:text-center">
+                            <h3 class="text-xl md:text-2xl font-black text-slate-800 dark:text-slate-100 mb-2 md:mb-3 transition-colors duration-300">${service.title}</h3>
+                            <p class="text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-6 md:mb-8 text-xs md:text-sm">${service.desc}</p>
+                        </div>
+                        <div class="relative z-10 mt-auto">
+                            <a href="${service.url}" target="_blank" onclick="playClickSound()" class="w-full py-3 md:py-3.5 rounded-xl font-bold text-white flex justify-center items-center gap-3 shadow-md hover:shadow-xl transform transition-all hover:-translate-y-1 text-sm md:text-base" style="background-color: ${service.themeColor};"><span>ابدأ الخدمة</span><i class="fa-solid fa-arrow-left-long group-hover:-translate-x-2 transition-transform"></i></a>
+                        </div>
+                    </div>`;
+                servicesContainer.insertAdjacentHTML('beforeend', cardHTML);
+            });
+            // تشغيل مكتبة VanillaTilt للبطاقات فقط إذا كانت الشاشة ليست هاتفاً ذكياً لمنع التعارض مع التمرير
+            if (window.innerWidth > 768) {
+                VanillaTilt.init(document.querySelectorAll(".service-card"));
+            }
+        }
+
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
+        themeToggle.addEventListener('click', () => {
+            playClickSound(); htmlElement.classList.toggle('dark');
+            localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            renderCards(servicesData.filter(s => s.title.toLowerCase().includes(term) || s.desc.toLowerCase().includes(term)));
+        });
+
+        const notiBtn = document.getElementById('notiBtn');
+        const notiDropdown = document.getElementById('notiDropdown');
+        notiBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); playPopSound();
+            notiDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => notiDropdown.classList.add('hidden'));
+
+        const openStatsBtn = document.getElementById('openStatsBtn');
+        const closeStatsBtn = document.getElementById('closeStatsBtn');
+        const statsModal = document.getElementById('statsModal');
+        const statsContent = document.getElementById('statsContent');
+
+        openStatsBtn.addEventListener('click', () => {
+            playClickSound();
+            statsModal.classList.remove('hidden');
+            setTimeout(() => { statsContent.classList.remove('scale-95', 'opacity-0'); statsContent.classList.add('scale-100', 'opacity-100'); }, 10);
+        });
+        function closeStats() {
+            statsContent.classList.remove('scale-100', 'opacity-100'); statsContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => statsModal.classList.add('hidden'), 300);
+        }
+        closeStatsBtn.addEventListener('click', () => { playPopSound(); closeStats(); });
+        document.getElementById('statsOverlay').addEventListener('click', closeStats);
+
+        const magicCursor = document.getElementById('magic-cursor');
+        document.addEventListener('mousemove', (e) => { if(window.innerWidth > 768) { magicCursor.style.left = e.clientX + 'px'; magicCursor.style.top = e.clientY + 'px'; } });
+        document.addEventListener('mouseover', (e) => { if(e.target.closest('.interactive-element') || e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button') magicCursor.classList.add('cursor-hover'); });
+        document.addEventListener('mouseout', (e) => { if(e.target.closest('.interactive-element') || e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button') magicCursor.classList.remove('cursor-hover'); });
+        window.addEventListener('scroll', () => { document.getElementById('scroll-progress').style.width = ((document.documentElement.scrollTop || document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100 + '%'; });
+
+        window.onload = () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('opacity-0');
+                setTimeout(() => {
+                    splash.remove(); renderCards(servicesData);
+                    let i = 0; const txt = "المنصة الرقمية لإدارة التوجيه الطلابي";
+                    function type() { if(i < txt.length) { document.getElementById("dynamic-greeting").textContent += txt.charAt(i); i++; setTimeout(type, 50); } }
+                    type();
+                }, 1000);
+            }, 2000);
+        };
+    </script>
+</body>
+</html>
