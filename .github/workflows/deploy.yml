@@ -26,11 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare site
-        run: |
-          mkdir public
-          cp index.html public/index.html
-          touch public/.nojekyll
+- name: Prepare site
+  run: |
+    mkdir public
+    cp index.html public/index.html
+    cp logo.png public/logo.png
+    touch public/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
