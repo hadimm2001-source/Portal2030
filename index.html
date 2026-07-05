@@ -466,7 +466,7 @@
                 splash.classList.add('opacity-0');
                 setTimeout(() => {
                     splash.remove(); renderCards(servicesData);
-                    let i = 0; const txt = "المنصة الرقمية لإدارة التوجيه الطلابي";
+                    let i = 0; const txt = "المنصة الرقمية للتوجيه الطلابي";
                     function type() { if(i < txt.length) { document.getElementById("dynamic-greeting").textContent += txt.charAt(i); i++; setTimeout(type, 50); } }
                     type();
                 }, 1000);
