@@ -189,7 +189,7 @@
     <div id="splash-screen" class="fixed inset-0 z-[9999] bg-slate-50 dark:bg-darkBg flex flex-col items-center justify-center transition-opacity duration-1000 px-4 text-center">
         <div class="relative mb-8 md:mb-10 flex items-center justify-center animate-float">
             <!-- شعار وزارة التعليم المفرغ مع الظل -->
-            <img src="./logo.png" alt="شعار وزارة التعليم" class="h-24 md:h-36 object-contain relative z-10 drop-shadow-xl">
+            <img src="https://mrkzgulfup.com/uploads/178317414489971.png" alt="شعار وزارة التعليم" class="h-24 md:h-36 object-contain relative z-10 drop-shadow-xl" onerror="this.src='https://placehold.co/300x100/ffffff/047857?text=Ministry+of+Education'">
         </div>
         <h1 class="text-2xl sm:text-3xl md:text-5xl font-black text-slate-800 dark:text-white typewriter-text px-2 max-w-full overflow-hidden">
             بوابة التوجيه الطلابي
@@ -204,7 +204,7 @@
                 <div class="flex items-center gap-3 md:gap-4 group interactive-element">
                     <!-- شعار وزارة التعليم في الهيدر -->
                     <div class="group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
-                        <img src="./logo.png" alt="وزارة التعليم" class="h-10 md:h-12 object-contain drop-shadow-md">
+                        <img src="https://mrkzgulfup.com/uploads/178317414489971.png" alt="وزارة التعليم" class="h-10 md:h-12 object-contain drop-shadow-md" onerror="this.src='https://placehold.co/100x40/ffffff/047857?text=Logo'">
                     </div>
                     <div>
                         <h1 class="text-lg md:text-xl font-black text-slate-900 dark:text-white tracking-tight">التوجيه الطلابي</h1>
@@ -370,7 +370,7 @@
             { title: 'رصد السلوك المتميز', desc: 'منصة لتحفيز الإيجابية، ورصد الإنجازات لبناء لوحات شرف لتعزيز التنافس.', url: 'https://hadimm2001-source.github.io/Solowk2030/', icon: 'fa-medal', themeColor: '#f59e0b', hoverShadow: 'rgba(245, 158, 11, 0.4)', delay: '200' },
             { title: 'رصد الحضور والتأخير والغياب', desc: 'متابعة دقيقة وفورية لحضور الطلاب، وإصدار إشعارات لرفع الانضباط.', url: 'https://hadimm2001-source.github.io/Student/', icon: 'fa-fingerprint', themeColor: '#3b82f6', hoverShadow: 'rgba(59, 130, 246, 0.4)', delay: '300' },
             { title: 'رصد المشكلات السلوكية', desc: 'توثيق الحالات السلوكية وتطبيق الخطط العلاجية الإرشادية لدعم الطالب.', url: 'https://hadimm2001-source.github.io/profile2026/', icon: 'fa-shield-heart', themeColor: '#ef4444', hoverShadow: 'rgba(239, 68, 68, 0.4)', delay: '400' },
-            { title: 'تقارير برنامج حضوري', desc: 'استعراض تقارير وإحصائيات الحضور والانصراف التفصيلية لبرنامج حضوري.', url: 'https://hadimm2001-source.github.io/hather2026/', icon: 'fa-clipboard-check', themeColor: '#14b8a6', hoverShadow: 'rgba(20, 184, 166, 0.4)', delay: '500' }
+            { title: 'تقارير برنامج حضوري', desc: 'استعراض تقارير وإحصائيات الحضور والانصراف التفصيلية لبرنامج حضوري.', url: 'https://hadimm2001-source.github.io/hather2001/', icon: 'fa-clipboard-check', themeColor: '#14b8a6', hoverShadow: 'rgba(20, 184, 166, 0.4)', delay: '500' }
         ];
 
         let synth = null;
@@ -466,7 +466,7 @@
                 splash.classList.add('opacity-0');
                 setTimeout(() => {
                     splash.remove(); renderCards(servicesData);
-                    let i = 0; const txt = "المنصة الرقمية للتوجيه الطلابي";
+                    let i = 0; const txt = "المنصة الرقمية لقسم التوجيه الطلابي";
                     function type() { if(i < txt.length) { document.getElementById("dynamic-greeting").textContent += txt.charAt(i); i++; setTimeout(type, 50); } }
                     type();
                 }, 1000);
@@ -475,6 +475,3 @@
     </script>
 </body>
 </html>
-<!-- redeploy -->
-<!-- redeploy -->
-<!-- redeploy -->
