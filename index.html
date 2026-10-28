@@ -191,7 +191,9 @@
             <div class="flex justify-between items-center h-20">
                 
                 <!-- جهة اليمين: شعار الوزارة -->
-<img src="./logo.png" alt="شعار وزارة التعليم" class="h-10 md:h-14 object-contain drop-shadow-sm transition-all hover:scale-105">
+                <div class="flex items-center">
+                    <img src="https://mrkzgulfup.com/uploads/178317414489971.png" alt="شعار وزارة التعليم" class="h-10 md:h-14 object-contain drop-shadow-sm transition-all hover:scale-105">
+                </div>
 
                 <!-- جهة اليسار: الإشعارات والمستخدم -->
                 <div class="flex items-center gap-2 md:gap-4">
@@ -345,14 +347,15 @@
     </div>
 
     <script>
-        // مصفوفة البطاقات كاملة (6 بطاقات)
+        // مصفوفة البطاقات كاملة (7 بطاقات)
         const servicesData = [
             { title: 'برامج التوجيه الطلابي', desc: 'المكتبة الشاملة لتصفح وتنفيذ برامج خطة التوجيه الطلابي المعتمدة وزارياً.', url: 'https://hadimm2001-source.github.io/Tawjeeh2030/', icon: 'fa-book-open-reader', themeColor: '#8b5cf6', hoverShadow: 'rgba(139, 92, 246, 0.4)', delay: '0' },
             { title: 'ترشيح الطلاب المتميزين', desc: 'نظام إلكتروني لترشيح الطلاب للجوائز والمسابقات على مستوى المدرسة.', url: 'https://hadimm2001-source.github.io/Recommendation2026/', icon: 'fa-trophy', themeColor: '#10b981', hoverShadow: 'rgba(16, 185, 129, 0.4)', delay: '100' },
             { title: 'رصد السلوك المتميز', desc: 'منصة لتحفيز الإيجابية، ورصد الإنجازات لبناء لوحات شرف لتعزيز التنافس.', url: 'https://hadimm2001-source.github.io/Solowk2030/', icon: 'fa-medal', themeColor: '#f59e0b', hoverShadow: 'rgba(245, 158, 11, 0.4)', delay: '200' },
             { title: 'رصد الحضور والتأخير والغياب', desc: 'متابعة دقيقة وفورية لحضور الطلاب، وإصدار إشعارات لرفع الانضباط.', url: 'https://hadimm2001-source.github.io/Student2033/', icon: 'fa-fingerprint', themeColor: '#3b82f6', hoverShadow: 'rgba(59, 130, 246, 0.4)', delay: '300' },
             { title: 'رصد المشكلات السلوكية', desc: 'توثيق الحالات السلوكية وتطبيق الخطط العلاجية الإرشادية لدعم الطالب.', url: 'https://hadimm2001-source.github.io/Misbehavior/', icon: 'fa-shield-heart', themeColor: '#ef4444', hoverShadow: 'rgba(239, 68, 68, 0.4)', delay: '400' },
-            { title: 'تقارير برنامج حضوري', desc: 'استعراض تقارير وإحصائيات الحضور والانصراف التفصيلية لبرنامج حضوري.', url: 'https://hadimm2001-source.github.io/Hodoory2030//', icon: 'fa-clipboard-check', themeColor: '#14b8a6', hoverShadow: 'rgba(20, 184, 166, 0.4)', delay: '500' }
+            { title: 'تقارير برنامج حضوري', desc: 'استعراض تقارير وإحصائيات الحضور والانصراف التفصيلية لبرنامج حضوري.', url: 'https://hadimm2001-source.github.io/hather2026/', icon: 'fa-clipboard-check', themeColor: '#0d9488', hoverShadow: 'rgba(13, 148, 136, 0.4)', delay: '500' },
+            { title: 'نظام التقويم المدرسي', desc: 'إدارة وتقييم الأداء المدرسي وإصدار تقارير التقويم الشاملة بدقة.', url: 'https://hadimm2001-source.github.io/Assessment_Reports/', icon: 'fa-list-check', themeColor: '#ec4899', hoverShadow: 'rgba(236, 72, 153, 0.4)', delay: '600' }
         ];
 
         let synth = null;
