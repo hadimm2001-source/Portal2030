@@ -126,7 +126,7 @@
             transform-style: preserve-3d;
             transform: perspective(1000px);
             transition: all 0.4s ease;
-            touch-action: pan-y; /* لضمان التمرير العمودي في الجوال */
+            touch-action: pan-y;
         }
         .dark .service-card {
             background: #18181b;
@@ -190,9 +190,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
-                <!-- جهة اليمين: شعار الوزارة -->
+                <!-- جهة اليمين: شعار الوزارة (تم تحديث الرابط برابط مباشر مستقر ومضمون على GitHub Pages) -->
                 <div class="flex items-center">
-                    <img src="https://mrkzgulfup.com/uploads/178317414489971.png" alt="شعار وزارة التعليم" class="h-10 md:h-14 object-contain drop-shadow-sm transition-all hover:scale-105">
+                    <img src="https://cdn.jsdelivr.net/gh/hadimm2001-source/Assessment_Reports@main/public/moe_logo.png" alt="شعار وزارة التعليم" class="h-10 md:h-14 object-contain drop-shadow-sm transition-all hover:scale-105">
                 </div>
 
                 <!-- جهة اليسار: الإشعارات والمستخدم -->
@@ -364,7 +364,7 @@
             if (!isAudioReady) { await Tone.start(); synth = new Tone.PolySynth(Tone.Synth).toDestination(); synth.volume.value = -15; isAudioReady = true; }
         }
         window.addEventListener('click', initAudio, { once: true });
-        window.addEventListener('touchstart', initAudio, { once: true }); // لدعم الجوالات
+        window.addEventListener('touchstart', initAudio, { once: true });
         
         function playHoverSound() { if (isAudioReady && synth) synth.triggerAttackRelease("C6", "32n", "+0", 0.1); }
         function playClickSound() { if (isAudioReady && synth) synth.triggerAttackRelease(["E5", "A5"], "16n"); }
@@ -395,7 +395,6 @@
                     </div>`;
                 servicesContainer.insertAdjacentHTML('beforeend', cardHTML);
             });
-            // تشغيل مكتبة VanillaTilt للبطاقات فقط إذا كانت الشاشة ليست هاتفاً ذكياً لمنع التعارض مع التمرير
             if (window.innerWidth > 768) {
                 VanillaTilt.init(document.querySelectorAll(".service-card"));
             }
